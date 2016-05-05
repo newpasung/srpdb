@@ -1,10 +1,10 @@
-package srp.mongodb.main;
+package main;
 
 import org.bson.Document;
 
 import srp.mongodb.serviceimpls.CategoryServiceImpl;
 import srp.mongodb.services.CategoryService;
-import srp.mongodb.utils.Names;
+import utils.Names;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;

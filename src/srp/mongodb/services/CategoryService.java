@@ -28,9 +28,9 @@ public interface CategoryService {
 			String pageIndex, String count);
 	
 	/*
-	 * 初始化商品分类数据
+	 * 初始化分类的信息，注意这里是利用文件来初始化商品分类的
 	 * 
-	 * @param categories 通过map结构初始化商品分类数据，map的key为父分类名，value里面村子分类名
+	 * @param filePath 文件的路径，以“包名/文件名”为格式，不保证平台兼容性
 	 */
 	String iniCategory(String filePath);
 	

@@ -8,18 +8,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.JsonParsor;
+import main.Logger;
+import main.MongoProxy;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.bson.Document;
 
-import srp.mongodb.main.JsonParsor;
-import srp.mongodb.main.Logger;
-import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.CategoryService;
 import srp.mongodb.services.ProductService;
-import srp.mongodb.utils.Names;
-import srp.mongodb.utils.StatusCode;
+import utils.Names;
+import utils.StatusCode;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -66,8 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public String iniCategory(String filePath) {
 		try {
 			String iniStrData = "";
-			InputStream inputStream = getClass().getResourceAsStream(
-					"/srp/mongodb/serviceimpls/categories.txt");
+			InputStream inputStream = getClass().getResourceAsStream(filePath);
 			InputStreamReader reader = new InputStreamReader(inputStream);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			String line = "";
