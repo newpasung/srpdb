@@ -1,23 +1,25 @@
-package srp.mongodb.serviceImpls;
+package srp.mongodb.serviceimpls;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.JsonParsor;
-import main.Logger;
-import main.MongoProxy;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.bson.Document;
 
+import srp.mongodb.main.JsonParsor;
+import srp.mongodb.main.Logger;
+import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.CategoryService;
-import utils.Names;
+import srp.mongodb.services.ProductService;
+import srp.mongodb.utils.Names;
+import srp.mongodb.utils.StatusCode;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -32,25 +34,47 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public String getProductsByCat(String categoryName, int listType,
-			int pageIndex, int count) {
+	public String getProductsByCat(String categoryName, String listType,
+			String pageIndex, String count) {
+		int pageIndex_int;
+		int count_int;
+		try {
+			pageIndex_int = Integer.parseInt(pageIndex);
+			if (pageIndex_int<=1) {
+				pageIndex_int = 1;
+			}
+		} catch (Exception e) {
+			pageIndex_int = 1;
+		}
+		try {
+			count_int = Integer.parseInt(count);
+			if (count_int<0) {
+				count_int = ProductService.ITEMCOUNT_DEFAULT;
+			}
+		} catch (Exception e) {
+			count_int = ProductService.ITEMCOUNT_DEFAULT;
+		}
 		MongoCollection<Document> collection = MongoProxy.getCollProduct();
 		FindIterable<Document> findIterable = collection.find(Filters.eq(
-				Names.DCProduct_category, categoryName));
+				Names.DCProduct_category, categoryName)).skip(
+				(pageIndex_int <= 1 ? 0 :( pageIndex_int - 1)*count_int))
+				.limit(pageIndex_int);
 		return JsonParsor.succeedPrintAll("products", findIterable);
 	}
 
 	@Override
-	public void iniCategory(String filePath) {
+	public String iniCategory(String filePath) {
 		try {
 			String iniStrData = "";
-			File file = new File(filePath);
-			FileReader reader = new FileReader(file);
+			InputStream inputStream = getClass().getResourceAsStream(
+					"/srp/mongodb/serviceimpls/categories.txt");
+			InputStreamReader reader = new InputStreamReader(inputStream);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
 				iniStrData += line;
 			}
+			Logger.debug(iniStrData);
 			MongoCollection<Document> collection = MongoProxy.getCollCategory();
 			JSONArray jsonArray = JSONArray.fromObject(iniStrData);
 			List<Document> documents = new ArrayList<>();
@@ -59,15 +83,16 @@ public class CategoryServiceImpl implements CategoryService {
 						.toString()));
 			}
 			collection.insertMany(documents);
-			Logger.debug("类别初始化成功"
-					+ JsonParsor.succeedPrintAll("categories",
-							collection.find()));
+			return JsonParsor.succeed("成功");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return JsonParsor.fail(StatusCode.INVALIDDATA, "路径错误");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return JsonParsor.fail(StatusCode.FAILE, "文件读写错误");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonParsor.fail(StatusCode.FAILE, "未知错误，注意不能多次初始化");
 		}
 	}
 

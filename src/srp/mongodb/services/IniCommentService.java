@@ -9,15 +9,15 @@ public interface IniCommentService {
 	/*
 	 * 插入一条评论数据
 	 */
-	void insertOne(String productId, String content, String time,
+	String insertOne(String productId, String content, String time,
 			String commentor, String source_url, String avatar,
-			String[] imageUrls);
+			String[] imageUrls, String rate);
 
 	/*
 	 * 根据commentId删除一条评论
 	 * @param commentId 要删除的评论的id
 	 */
-	void deleteOne(String commentId);
+	String deleteOne(String commentId);
 
 	/*
 	 * 获取一系列可用于展示的评论，
@@ -32,7 +32,7 @@ public interface IniCommentService {
 	 * 
 	 * @return 返回json格式的评论列表
 	 */
-	String getSome(String productId, String listType, int count,
+	String getSome(String productId, int listType, int count,
  int pageIndex);
 
 	
@@ -43,7 +43,7 @@ public interface IniCommentService {
 	 * 
 	 * @param inicommentId 原始评论Id
 	 */
-	void markFiltered(String inicommentId, int dirty);
+	String markFiltered(String inicommentId, int dirty);
 
 	/*
 	 * 用来更改一个数据的标志位，表示是否经过情感分析
@@ -52,6 +52,6 @@ public interface IniCommentService {
 	 * 
 	 * @param inicommentId 原始评论Id
 	 */
-	void markEmotionAnalysed(String inicommentId, int dirty);
+	String markEmotionAnalysed(String inicommentId, int dirty);
 
 }

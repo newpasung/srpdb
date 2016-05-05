@@ -1,17 +1,17 @@
-package srp.mongodb.serviceImpls;
+package srp.mongodb.serviceimpls;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import main.JsonParsor;
-import main.MongoProxy;
+import java.util.Map;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import srp.mongodb.main.JsonParsor;
+import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.QCRecordService;
-import utils.Names;
+import srp.mongodb.utils.Names;
+import srp.mongodb.utils.StatusCode;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -19,27 +19,31 @@ import com.mongodb.client.MongoCollection;
 public class QCRecordServiceImpl implements QCRecordService {
 
 	@Override
-	public void insertOne(String qcItem, String productName,
-			String brand, int isFined, String qcResult, String qcInstitude) {
+	public String insertOne(String qcItem, String productName,
+			String brand, int isFined, String qcResult, String qcInstitude,Map<String, String> attrs) {
 		MongoCollection<Document> collection = MongoProxy.getCollQCRecord();
 		try {
-			collection.insertOne(new Document()
+			Document document =new Document();
+			document.putAll(attrs);
+			collection.insertOne(document
 					.append(Names.DCQCRecord_productname, productName)
 					.append(Names.DCQCRecord_item, qcItem)
 					.append(Names.DCQCRecord_brand, brand)
 					.append(Names.DCQCRecord_isFine, isFined)
 					.append(Names.DCQCRecord_resulttext, qcResult)
-					.append(Names.DCQCRecord_institude, qcInstitude));
+					.append(Names.DCQCRecord_institude, qcInstitude))
+					;
+			return JsonParsor.succeed("²Ù×÷³É¹¦");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		return JsonParsor.fail(StatusCode.ERROR_FROM_DATABASE, "²Ù×÷Ê§°Ü");
 	}
 
 	@Override
 	public String getSomeByIds(String... qcIds) {
 		if (qcIds == null) {
-			return JsonParsor.fail("×Ö·ûÎª¿Õ");
+			return JsonParsor.fail(StatusCode.INVALIDDATA, "×Ö·ûÎª¿Õ");
 		}
 		List<ObjectId> objectIds = new ArrayList<>();
 		for (int i = 0; i < qcIds.length; i++) {

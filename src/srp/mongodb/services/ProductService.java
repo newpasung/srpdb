@@ -6,6 +6,9 @@ import java.util.Map;
  * 对归一化后的商品数据的操作，这里操作的数据都是直接用于显示的
  */
 public interface ProductService {
+	public static int LISTTYPE_DEFAULT = 0;
+	public static int ITEMCOUNT_DEFAULT = 10;
+	public static int PAGEINDEX_DEFAULT = 1;
 
 	/*
 	 * 获取一个商品的详细信息
@@ -18,6 +21,13 @@ public interface ProductService {
 	
 	
 	/*
+	 * @param count 一个分页多少条数据
+	 * 
+	 * @param page 需要第几个分页的数据
+	 */
+	String getSome(int count, int page);
+
+	/*
 	 * 插入一条商品的数据，因为这里的数据需保持独立性，不能有重复数据，所以重复数据会失败
 	 * 
 	 * @param name 商品的名称
@@ -28,7 +38,7 @@ public interface ProductService {
 	 * 
 	 * @param attrs 商品的属性对，如key为颜色，value为红色
 	 */
-	void insertOne(String name, String brand, String category,
+	String insertOne(String name, String brand, String category,
 			String[] imgUrls,
 			Map<String, String> attrs);
 
@@ -52,7 +62,7 @@ public interface ProductService {
 	 * 
 	 * @param lastUpdatedTime 这个数据更新时间，即调用此函数时的时间
 	 */
-	void updatePrice(String productId, double price, String platform,
+	String updatePrice(String productId, double price, String platform,
 			String priceUrl, String lastUpdatedTime);
 
 	/*
@@ -64,7 +74,7 @@ public interface ProductService {
 	 * 
 	 * @param newValue 新的属性值
 	 */
-	void alterAttr(String productId, String attrName, String newValue);
+	String alterAttr(String productId, String attrName, String newValue);
 
 	/*
 	 * 删除某商品的一条属性

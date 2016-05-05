@@ -25,7 +25,7 @@ public interface IniProductService {
 	 * 
 	 * @param tags 电商平台提供的商品评价关键词
 	 */
-	void insertOne(String name, String category, String brand,
+	String insertOne(String name, String category, String brand,
 			String[] imgUrls,
 			Map<String, String> attrs, String sourceUrl, String[] tags);
 

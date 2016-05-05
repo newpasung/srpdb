@@ -1,10 +1,11 @@
-package utils;
+package srp.mongodb.utils;
 
-import main.JsonParsor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.bson.Document;
+
+import srp.mongodb.main.JsonParsor;
 
 import com.mongodb.client.FindIterable;
 

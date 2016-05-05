@@ -1,18 +1,18 @@
-package srp.mongodb.serviceImpls;
+package srp.mongodb.serviceimpls;
 
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import main.JsonParsor;
-import main.MongoProxy;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import srp.mongodb.main.JsonParsor;
+import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.UserService;
-import utils.Names;
-import utils.UserHelper;
+import srp.mongodb.utils.Names;
+import srp.mongodb.utils.StatusCode;
+import srp.mongodb.utils.UserHelper;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 		if (document != null) {
 			return UserHelper.printAll(document);
 		}
-		return JsonParsor.fail("账号或密码错误");
+		return JsonParsor.fail(StatusCode.INVALIDACCPASWD, "账号或密码错误");
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 				Filters.eq(Names.DCAccount_account, account))
 				.first();
 		if (oldData != null) {
-			return JsonParsor.fail("账号已经被使用");
+			return JsonParsor.fail(StatusCode.DUPLICATE_ACCOUNT, "账号已经被使用");
 		}
 		String passwd_md5 = DigestUtils.md5Hex(passwd);
 		try {
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 					.append(Names.DCAccount_nickname, "用户" + account));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return JsonParsor.fail("系统错误，未能注册");
+			return JsonParsor.fail(StatusCode.ERROR_FROM_DATABASE, "系统错误，未能注册");
 		}
 		Document newData = collection.find(Filters.eq(Names.DCAccount_account,
 				account)).first();
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 				Filters.and(Filters.eq(Names.DCAccount_account, account)))
 				.first();
 		if (oldData == null) {
-			return JsonParsor.fail("旧密码不正确");
+			return JsonParsor.fail(StatusCode.INVALIDPARAMETER, "旧密码不正确");
 		}
 		try {
 			collection.updateOne(Filters.eq(Names.DCAccount_account, account),
@@ -79,7 +79,8 @@ public class UserServiceImpl implements UserService {
 							newPwd_md5)));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return JsonParsor.fail("系统错误，修改密码失败");
+			return JsonParsor.fail(StatusCode.ERROR_FROM_DATABASE,
+					"系统错误，修改密码失败");
 		}
 		return JsonParsor.succeed("密码修改成功，请重新登录");
 	}
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService {
 		Document userData = collection.find(
 				Filters.eq(Names.DCAccount_account, account)).first();
 		if (userData == null) {
-			return JsonParsor.fail("用户信息不存在");
+			return JsonParsor.fail(StatusCode.INVALIDPARAMETER, "用户信息不存在");
 		}
 		return UserHelper.printAll(userData);
 	}
@@ -103,14 +104,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String favour(String productId, int isFavour, String uid) {
+	public String favour(String productId, int isFavour, String account) {
 		MongoCollection<Document> collection = MongoProxy.getCollProduct();
 		Document oldData = collection.find(
 				Filters.eq(Names.DCProduct_productId, new ObjectId(productId)))
 				.first();
 		int favourCount = oldData.getInteger(Names.DCProduct_favourcount, 0);
 		if (favourCount == 0 && isFavour == 0) {
-			return JsonParsor.fail("无法取消赞");
+			return JsonParsor.fail(StatusCode.OPERATION_STATUS_CONFLICT,
+					"无法取消赞");
 		}
 		try {
 			collection.updateMany(Filters.eq(Names.DCProduct_productId,
@@ -118,7 +120,7 @@ public class UserServiceImpl implements UserService {
 					new Document(Names.DCProduct_favourcount, favourCount
 							+ isFavour)));
 		} catch (Exception e) {
-			return JsonParsor.fail("操作失败");
+			return JsonParsor.fail(StatusCode.ERROR_FROM_DATABASE, "操作失败");
 		}
 		return JsonParsor.succeed("操作成功");
 	}

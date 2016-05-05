@@ -1,15 +1,16 @@
-package srp.mongodb.serviceImpls;
+package srp.mongodb.serviceimpls;
 
 import java.util.Arrays;
 import java.util.Map;
 
-import main.MongoProxy;
-
 import org.bson.Document;
 
+import srp.mongodb.main.JsonParsor;
+import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.IniProductService;
-import utils.IniProductHelper;
-import utils.Names;
+import srp.mongodb.utils.IniProductHelper;
+import srp.mongodb.utils.Names;
+import srp.mongodb.utils.StatusCode;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -17,7 +18,7 @@ import com.mongodb.client.model.Filters;
 public class IniProductServiceImpl implements IniProductService {
 
 	@Override
-	public void insertOne(String name, String category, String brand,
+	public String insertOne(String name, String category, String brand,
 			String[] imgUrls,
 			Map<String, String> attrs, String sourceUrl, String[] tags) {
 		MongoCollection<Document> collection = MongoProxy.getCollIniPro();
@@ -31,9 +32,11 @@ public class IniProductServiceImpl implements IniProductService {
 					.append(Names.DCIniPro_sourceurl, sourceUrl)
 					.append(Names.DCIniPro_tags, Arrays.asList(tags))
 					.append(Names.DCIniPro_dirty, 0));
+			return JsonParsor.succeed("≤Â»Î≥…π¶");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return JsonParsor.fail(StatusCode.FAILE, "");
 	}
 
 	@Override

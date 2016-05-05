@@ -24,15 +24,15 @@ public interface CategoryService {
 	 * 
 	 * @return 返回json格式的商品列表数据
 	 */
-	String getProductsByCat(String categoryName, int listType, int pageIndex,
-			int count);
+	String getProductsByCat(String categoryName, String listType,
+			String pageIndex, String count);
 	
 	/*
 	 * 初始化商品分类数据
 	 * 
 	 * @param categories 通过map结构初始化商品分类数据，map的key为父分类名，value里面村子分类名
 	 */
-	void iniCategory(String filePath);
+	String iniCategory(String filePath);
 	
 
 }

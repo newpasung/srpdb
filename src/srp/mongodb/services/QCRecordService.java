@@ -1,5 +1,7 @@
 package srp.mongodb.services;
 
+import java.util.Map;
+
 /*
  * 质量抽检记录数据的操作接口
  * */
@@ -22,8 +24,8 @@ public interface QCRecordService {
 	 * 
 	 * @param qcInstitude 质检机构
 	 */
-	void insertOne(String qcItem, String productName,
-			String brand, int isFined, String qcResult, String qcInstitude);
+	String insertOne(String qcItem, String productName,
+			String brand, int isFined, String qcResult, String qcInstitude,Map<String, String> attrs);
 
 	/*
 	 * 通过 qc的id获取质检记录的详细信息

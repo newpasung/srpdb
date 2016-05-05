@@ -1,4 +1,4 @@
-package utils;
+package srp.mongodb.utils;
 
 public class Names {
 
@@ -25,12 +25,13 @@ public class Names {
 	public static String CollNameIniComment = "inicomment";
 	public static String DCIniComment_commentid = "_id";
 	public static String DCIniComment_content = "content";
-	public static String DCIniComment_time = "content";
+	public static String DCIniComment_time = "time";
 	public static String DCIniComment_commentor = "commentor";
 	public static String DCIniComment_source = "soucre";
 	public static String DCIniComment_imgincomment = "imgsincomment";
 	public static String DCIniComment_avatar = "avatar";
 	public static String DCIniComment_productId = "productId";
+	public static String DCIniComment_rate = "rate";
 	public static String DCIniComment_dirtyFilter = "dirtyfilter";
 	public static String DCIniComment_dirtyEmoAnalysis = "dirtyemoanalysis";
 
@@ -47,6 +48,7 @@ public class Names {
 	public static String DCComment_productId = "productId";
 	public static String DCComment_imgincomment = "imgsincomment";
 	public static String DCComment_avatar = "avatar";
+	public static String DCComment_rate = "rate";
 
 	public static String CollNameQCRecord = "qcrecord";
 	public static String DCQCRecord_id = "_id";
@@ -81,5 +83,10 @@ public class Names {
 	public static String CollNameProductMap = "productmap";
 	public static String DCProMap_beforeid = "proidbefore";
 	public static String DCProMap_afterid = "proidafter";
+
+	public static String CollNameOuterCommentor = "outercommentor";
+	public static String DCOuterCommentor_id = "_id";
+	public static String DCOuterCommentor_name = "name";
+	public static String DCOuterCommentor_platform = "platform";
 
 }

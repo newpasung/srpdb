@@ -64,8 +64,10 @@ public interface UserService {
 	 * 
 	 * @param isFavour 0表示贬乏，1表示点赞
 	 * 
+	 * @param account user account
+	 * 
 	 * @return 返回一些点赞现时数据
 	 */
-	String favour(String productId, int isFavour, String uid);
+	String favour(String productId, int isFavour, String account);
 
 }

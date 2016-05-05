@@ -1,19 +1,20 @@
-package utils;
+package srp.mongodb.utils;
 
 import java.util.Iterator;
 import java.util.Set;
 
-import main.JsonParsor;
 import net.sf.json.JSONObject;
 
 import org.bson.Document;
+
+import srp.mongodb.main.JsonParsor;
 
 public class UserHelper {
 
 	/* 打印所有可用的用户字段 */
 	public static String printAll(Document user) {
 		if (user==null) {
-			return JsonParsor.fail("无效user数据");
+			return JsonParsor.fail(StatusCode.INVALIDDATA, "无效user数据");
 		}
 		JSONObject result = new JSONObject();
 		JSONObject data=new JSONObject();
