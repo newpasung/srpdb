@@ -15,7 +15,7 @@ public class IniProductHelper {
 		JSONObject data = new JSONObject();
 		JSONArray productArray = new JSONArray();
 		for (Document document : findIterable) {
-			productArray.add(document.toJson());
+			productArray.add(JsonParsor.filterOid(document.toJson()));
 		}
 		data.put("products", productArray);
 		return JsonParsor.succeed(data);

@@ -27,7 +27,7 @@ public class UserHelper {
 				data.put(key, user.get(key));
 			}
 		}
-		result.put("user", data);
+		result.put("user", JsonParsor.filterOid(data.toString()));
 		return JsonParsor.succeed(result).toString();
 	}
 

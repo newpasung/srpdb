@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
 		MongoCollection<Document> collection = MongoProxy.getCollProduct();
 		FindIterable<Document> findIterable = collection.find(Filters.eq(
 				Names.DCProduct_productId, new ObjectId(productId)));
-		return JsonParsor.succeedPrintAll("product", findIterable);
+		return JsonParsor.succceedPrintOne("product", findIterable);
 	}
 
 	@Override

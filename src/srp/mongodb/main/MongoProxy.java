@@ -1,10 +1,10 @@
-package main;
+package srp.mongodb.main;
 
 import org.bson.Document;
 
 import srp.mongodb.serviceimpls.CategoryServiceImpl;
 import srp.mongodb.services.CategoryService;
-import utils.Names;
+import srp.mongodb.utils.Names;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -20,7 +20,8 @@ public class MongoProxy {
 			if (client == null) {
 				client = new MongoClient("localhost", 27017);
 				database = client.getDatabase("SRPQA");
-				if (database.getCollection(Names.CollNameAccount) == null) {
+				if (database
+						.getCollection(srp.mongodb.utils.Names.CollNameAccount) == null) {
 					database.createCollection(Names.CollNameAccount);
 				}
 				if (database.getCollection(Names.CollNameIniProduct) == null) {

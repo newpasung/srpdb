@@ -8,18 +8,17 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.JsonParsor;
-import main.Logger;
-import main.MongoProxy;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.bson.Document;
 
+import srp.mongodb.main.JsonParsor;
+import srp.mongodb.main.MongoProxy;
 import srp.mongodb.services.CategoryService;
 import srp.mongodb.services.ProductService;
-import utils.Names;
-import utils.StatusCode;
+import srp.mongodb.utils.Names;
+import srp.mongodb.utils.StatusCode;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -29,8 +28,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public String getAllCategory() {
-		MongoCollection<Document> collection = MongoProxy.getCollCategory();
-		return JsonParsor.succeedPrintAll("categories", collection.find());
+		MongoCollection<Document> collection = srp.mongodb.main.MongoProxy
+				.getCollCategory();
+		return srp.mongodb.main.JsonParsor.succeedPrintAll("categories",
+				collection.find());
 	}
 
 	@Override
@@ -73,7 +74,6 @@ public class CategoryServiceImpl implements CategoryService {
 			while ((line = bufferedReader.readLine()) != null) {
 				iniStrData += line;
 			}
-			Logger.debug(iniStrData);
 			MongoCollection<Document> collection = MongoProxy.getCollCategory();
 			JSONArray jsonArray = JSONArray.fromObject(iniStrData);
 			List<Document> documents = new ArrayList<>();

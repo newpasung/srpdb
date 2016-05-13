@@ -27,7 +27,7 @@ public class Names {
 	public static String DCIniComment_content = "content";
 	public static String DCIniComment_time = "time";
 	public static String DCIniComment_commentor = "commentor";
-	public static String DCIniComment_source = "soucre";
+	public static String DCIniComment_source = "source";
 	public static String DCIniComment_imgincomment = "imgsincomment";
 	public static String DCIniComment_avatar = "avatar";
 	public static String DCIniComment_productId = "productId";
